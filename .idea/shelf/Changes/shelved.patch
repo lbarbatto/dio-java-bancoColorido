@@ -1,0 +1,351 @@
+Index: src/ContaCorrente.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/ContaCorrente.java b/src/ContaCorrente.java
+new file mode 100644
+--- /dev/null	(date 1728519807678)
++++ b/src/ContaCorrente.java	(date 1728519807678)
+@@ -0,0 +1,14 @@
++public class ContaCorrente extends Conta{
++
++    public ContaCorrente(Cliente c1) {
++        super(c1);
++    }
++
++    @Override
++    public void imprimirExtrato() {
++        System.out.println("=== Extrato Conta Corrente ===");
++        super.imprimirDadosConta();
++    }
++
++
++}
+Index: src/ContaPoupanca.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/ContaPoupanca.java b/src/ContaPoupanca.java
+new file mode 100644
+--- /dev/null	(date 1728519807734)
++++ b/src/ContaPoupanca.java	(date 1728519807734)
+@@ -0,0 +1,12 @@
++public class ContaPoupanca extends Conta{
++
++    public ContaPoupanca(Cliente c1) {
++        super(c1);
++    }
++
++    @Override
++    public void imprimirExtrato() {
++        System.out.println("=== Extrato Conta Poupanca ===");
++        super.imprimirDadosConta();
++    }
++}
+Index: src/Conta.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/Conta.java b/src/Conta.java
+new file mode 100644
+--- /dev/null	(date 1728519968595)
++++ b/src/Conta.java	(date 1728519968595)
+@@ -0,0 +1,52 @@
++public abstract class Conta implements IConta {
++
++    private static final int AGENCIA_PADRAO = 1;
++    private static int SQUENCIAL = 1;
++
++    protected Cliente cliente;
++    protected int agencia;
++    protected int numero;
++    protected double saldo;
++
++    public Conta(Cliente cliente) {
++        this.cliente = new Cliente(cliente.getNome(), cliente.getCpf(), cliente.getCategoria());
++        this.agencia = Conta.AGENCIA_PADRAO;
++        this.numero = SQUENCIAL++;
++    }
++
++    @Override
++    public void depositar(double valor) {
++        this.saldo += valor;
++    }
++
++    @Override
++    public void sacar(double valor) {
++        this.saldo -= valor;
++    }
++
++    @Override
++    public void tronsferir(double valor, Conta contaDestino) {
++        this.sacar(valor);
++        contaDestino.depositar(valor);
++    }
++
++    public int getAgencia() {
++        return agencia;
++    }
++
++    public int getNumero() {
++        return numero;
++    }
++
++    public Double getSaldo() {
++        return saldo;
++    }
++
++    protected void imprimirDadosConta() {
++        System.out.printf("Titular: %s%n", this.cliente.getNome());
++        System.out.printf("Categoria: %s%n", this.cliente.getCategoria());
++        System.out.printf("Agencia: %d%n", this.agencia);
++        System.out.printf("Conta: %d%n", this.numero);
++        System.out.printf("Saldo: %.2f%n", this.saldo);
++    }
++}
+Index: src/IConta.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/IConta.java b/src/IConta.java
+new file mode 100644
+--- /dev/null	(date 1728518255953)
++++ b/src/IConta.java	(date 1728518255953)
+@@ -0,0 +1,9 @@
++public interface IConta {
++    void depositar(double valor);
++
++    void sacar(double valor);
++
++    void tronsferir(double valor, Conta contaDestino);
++
++    void imprimirExtrato();
++}
+Index: .idea/modules.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/modules.xml b/.idea/modules.xml
+new file mode 100644
+--- /dev/null	(date 1728513352977)
++++ b/.idea/modules.xml	(date 1728513352977)
+@@ -0,0 +1,8 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="ProjectModuleManager">
++    <modules>
++      <module fileurl="file://$PROJECT_DIR$/BancoColorido.iml" filepath="$PROJECT_DIR$/BancoColorido.iml" />
++    </modules>
++  </component>
++</project>
+\ No newline at end of file
+Index: src/Cliente.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/Cliente.java b/src/Cliente.java
+new file mode 100644
+--- /dev/null	(date 1728519340076)
++++ b/src/Cliente.java	(date 1728519340076)
+@@ -0,0 +1,39 @@
++public class Cliente {
++    private String nome;
++    private String cpf;
++    private Categoria categoria;
++
++    public Cliente(String nome, String cpf, Categoria categoria) {
++        this.nome = nome;
++        this.cpf = cpf;
++        this.categoria = categoria;
++    }
++
++    public String getNome() {
++        return nome;
++    }
++
++    public void setNome(String nome) {
++        this.nome = nome;
++    }
++
++    public String getCpf() {
++        return cpf;
++    }
++
++    public Categoria getCategoria() {
++        return categoria;
++    }
++
++    public void setCategoria(Categoria categoria) {
++        this.categoria = categoria;
++    }
++
++    @Override
++    public String toString() {
++        return "Cliente{" +
++                "nome='" + nome + '\'' +
++                ", categoria=" + categoria +
++                '}';
++    }
++}
+Index: BancoColorido.iml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/BancoColorido.iml b/BancoColorido.iml
+new file mode 100644
+--- /dev/null	(date 1728513352922)
++++ b/BancoColorido.iml	(date 1728513352922)
+@@ -0,0 +1,11 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<module type="JAVA_MODULE" version="4">
++  <component name="NewModuleRootManager" inherit-compiler-output="true">
++    <exclude-output />
++    <content url="file://$MODULE_DIR$">
++      <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
++    </content>
++    <orderEntry type="inheritedJdk" />
++    <orderEntry type="sourceFolder" forTests="false" />
++  </component>
++</module>
+\ No newline at end of file
+Index: .gitignore
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.gitignore b/.gitignore
+new file mode 100644
+--- /dev/null	(date 1728513347076)
++++ b/.gitignore	(date 1728513347076)
+@@ -0,0 +1,29 @@
++### IntelliJ IDEA ###
++out/
++!**/src/main/**/out/
++!**/src/test/**/out/
++
++### Eclipse ###
++.apt_generated
++.classpath
++.factorypath
++.project
++.settings
++.springBeans
++.sts4-cache
++bin/
++!**/src/main/**/bin/
++!**/src/test/**/bin/
++
++### NetBeans ###
++/nbproject/private/
++/nbbuild/
++/dist/
++/nbdist/
++/.nb-gradle/
++
++### VS Code ###
++.vscode/
++
++### Mac OS ###
++.DS_Store
+\ No newline at end of file
+Index: .idea/.gitignore
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/.gitignore b/.idea/.gitignore
+new file mode 100644
+--- /dev/null	(date 1728513353562)
++++ b/.idea/.gitignore	(date 1728513353562)
+@@ -0,0 +1,3 @@
++# Default ignored files
++/shelf/
++/workspace.xml
+Index: src/Main.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/Main.java b/src/Main.java
+new file mode 100644
+--- /dev/null	(date 1728520053391)
++++ b/src/Main.java	(date 1728520053391)
+@@ -0,0 +1,21 @@
++public class Main {
++    public static void main(String[] args) {
++        Cliente c1 = new Cliente("Joao", "09876", Categoria.BASICO);
++        Cliente c2 = new Cliente("Pedro", "12345", Categoria.EXCLUSIVO);
++
++
++        Conta cc = new ContaCorrente(c1);
++        Conta cp = new ContaPoupanca(c2);
++
++        cc.imprimirExtrato();
++        cp.imprimirExtrato();
++
++        cc.depositar(120);
++        cc.imprimirExtrato();
++        cc.sacar(10);
++        cc.tronsferir(50, cp);
++
++        cc.imprimirExtrato();
++        cp.imprimirExtrato();
++    }
++}
+\ No newline at end of file
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+new file mode 100644
+--- /dev/null	(date 1728513353063)
++++ b/.idea/misc.xml	(date 1728513353063)
+@@ -0,0 +1,6 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="ProjectRootManager" version="2" languageLevel="JDK_21" default="true" project-jdk-name="21" project-jdk-type="JavaSDK">
++    <output url="file://$PROJECT_DIR$/out" />
++  </component>
++</project>
+\ No newline at end of file
+Index: src/Categoria.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/Categoria.java b/src/Categoria.java
+new file mode 100644
+--- /dev/null	(date 1728519340201)
++++ b/src/Categoria.java	(date 1728519340201)
+@@ -0,0 +1,5 @@
++public enum Categoria {
++    BASICO,
++    ECONOMICO,
++    EXCLUSIVO
++}
+Index: .idea/vcs.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/vcs.xml b/.idea/vcs.xml
+new file mode 100644
+--- /dev/null	(date 1728513353119)
++++ b/.idea/vcs.xml	(date 1728513353119)
+@@ -0,0 +1,6 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="VcsDirectoryMappings">
++    <mapping directory="$PROJECT_DIR$" vcs="Git" />
++  </component>
++</project>
+\ No newline at end of file
